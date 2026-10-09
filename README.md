@@ -1,92 +1,70 @@
 # EcoEats API
 
-Base en Kotlin + Spring Boot, sin lógica de negocio todavía. Requiere Java 25 y Docker activo.
+Backend de comida colombiana saludable para clientes Android, iOS, Flutter y web.
+Incluye registro/login JWT, recuperación de contraseña con OTP, catálogo y CRUD ADMIN,
+e imágenes en un bucket privado S3-compatible.
 
-## Ejecutar en local
+**Stack:** Kotlin 2.4 · Java 25 · Spring Boot 4.1 · Spring MVC con virtual threads · JPA ·
+PostgreSQL 17 · Flyway · Spring Security · Jackson 3 · springdoc · AWS SDK v2 · JUnit/MockK/Testcontainers.
 
-Desde la raíz del repositorio:
+## Ejecutar local
+
+Requiere Java 25 y Docker activo. Desde la raíz del repo:
 
 ```sh
 cp .env.example .env
-# Editar .env con los valores del entorno.
+# Ajustar las variables; solo contiene valores locales de ejemplo.
 set -a
 source .env
 set +a
-./gradlew bootRun --args='--spring.profiles.active=local'
+docker compose up -d --build
+./gradlew bootRun
 ```
 
-Spring no carga `.env` automáticamente: las variables deben exportarse antes de iniciar.
-El perfil local inicia PostgreSQL 17 mediante Docker Compose.
-
-- Salud: http://localhost:8080/health
-- Swagger UI: http://localhost:8080/docs
-- OpenAPI: http://localhost:8080/v3/api-docs
-
-## Verificar
-
-```sh
-./gradlew build
-```
-
-El test de contexto usa PostgreSQL 17 con Testcontainers y requiere Docker. Las pruebas web
-verifican los envelopes de éxito y error, validación, estados HTTP y timestamps UTC.
+PostgreSQL usa 5432; MinIO S3 9000 y consola 9001. minio-init crea ecoeats-local.
+MinIO/mc se construyen desde versiones oficiales fijadas: la primera ejecución descarga
+y compila sus fuentes. El perfil local conserva el entorno Compose ya iniciado.
+Spring no lee .env automáticamente: deben exportarse sus variables.
 
 ## Configuración
 
-Las versiones se centralizan en `gradle/libs.versions.toml`. El perfil `prod` desactiva
-Docker Compose; configura las variables PostgreSQL, JWT y Resend en el entorno de despliegue.
-El password de seed es opcional. Si se configura `SEED_ADMIN_PASSWORD`, el arranque crea
-`admin@ecoeats.com` con rol `ADMIN` y BCrypt strength 10 solo si la cuenta no existe.
-El valor `123456` de `.env.example` es exclusivamente para desarrollo local.
+| Variables | Uso |
+|---|---|
+| SPRING_PROFILES_ACTIVE, PORT | local/prod; puerto 8080 por defecto |
+| PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD | PostgreSQL |
+| JWT_SECRET, JWT_EXPIRATION | Secret mínimo 32 bytes; vigencia 24h por defecto |
+| RESEND_API_KEY, RESEND_FROM_EMAIL, RESEND_FROM_NAME | Email; API key vacía en local usa LoggingEmailSender |
+| ALLOWED_ORIGINS | Orígenes web permitidos, separados por comas |
+| SEED_ADMIN_PASSWORD | Crea admin@ecoeats.com solo si no existe; 123456 es exclusivamente local |
+| BUCKET, ENDPOINT, REGION, ACCESS_KEY_ID, SECRET_ACCESS_KEY | Credentials del bucket Railway o MinIO |
+| S3_FORCE_PATH_STYLE, IMAGE_URL_TTL | false/24h por defecto; local usa path-style=true |
+| PUBLIC_URL, SPRINGDOC_ENABLED | Servidor de producción en OpenAPI; docs habilitados por defecto |
 
-Flyway aplica V1–V4 para crear usuarios, tokens de recuperación, platos y los 12 platos iniciales.
-JPA utiliza `ddl-auto=validate`. La autenticación utiliza JWT HS256: el secret debe contener
-al menos 32 bytes UTF-8. Los tokens duran `JWT_EXPIRATION` (24 horas por defecto).
-El registro y login son públicos; los GET de platos requieren token y las escrituras requieren
-rol ADMIN. Se cachea la existencia de usuarios durante cinco segundos; después de ese plazo,
-un token de un usuario eliminado devuelve 401 `Token inválido`.
+El perfil prod desactiva Compose. JPA valida el esquema; Flyway aplica V1–V4 y los 12 platos.
+No subas .env, credenciales ni reglas personales a Git. Un fallo de limpieza de imágenes
+después del commit se registra y requiere limpieza posterior; no revierte la transacción confirmada.
 
-Los archivos `.env`, `kotlin_global_rules.md`, metadatos del IDE y salidas de compilación
-quedan excluidos de Git. `.env.example` contiene únicamente valores ficticios.
+## Documentación y pruebas
 
-## Verificar persistencia local
-
-Después de iniciar con el perfil local y las variables exportadas:
-
-```sh
-docker compose exec postgres psql -U postgres -d ecoeats
-```
-
-```sql
-SELECT version, description, success FROM flyway_schema_history ORDER BY installed_rank;
-SELECT count(*) AS total_platos FROM dishes; -- 12
-SELECT name, price, rating FROM dishes ORDER BY name;
-SELECT id, email, role, numero_documento FROM users WHERE email = 'admin@ecoeats.com';
-```
-
-Las pruebas con Testcontainers verifican migraciones e idempotencia del seed, restricciones
-de unicidad, UUID v7, auditoría, repositorios y creación opcional del admin.
-
-## Registro y login
-
-Con la API local iniciada:
+- [Swagger UI local](http://localhost:8080/docs): Authorize y Try it out.
+- [OpenAPI servido](http://localhost:8080/v3/api-docs).
+- [Guía para móvil y web](docs/API.md).
+- [Contrato OpenAPI versionado](docs/openapi.yaml).
+- [Colección Postman](postman/EcoEats-API.postman_collection.json) y [entorno local](postman/EcoEats-local.postman_environment.json).
+- [Salud](http://localhost:8080/health).
 
 ```sh
-curl -i http://localhost:8080/api/securities/register \
-  -H 'Content-Type: application/json' \
-  -d '{"numero_documento":"12345678","nombres":"Demo","apellidos":"EcoEats","correo":"demo@ecoeats.com","password":"demo123"}'
-
-curl -i http://localhost:8080/api/securities/login \
-  -H 'Content-Type: application/json' \
-  -d '{"email":"demo@ecoeats.com","password":"demo123"}'
+./gradlew build             # Incluye PostgreSQL/MinIO y comprobación del contrato
+./gradlew generateOpenApi   # Regenerar YAML únicamente tras revisar un cambio intencional
 ```
 
-El registro devuelve 201; repetirlo devuelve 409. El login devuelve 200 con `id`, `email`,
-`token` y `tokenFirebaseAuth`. Envía el token como `Authorization: Bearer <token>`.
-BCrypt admite contraseñas de hasta 72 bytes UTF-8; el registro valida ese límite además
-del mínimo de seis caracteres.
+En Postman importa ambos archivos, selecciona EcoEats-local y ejecuta Auth y Platos en orden.
+Los scripts generan datos, guardan token y seleccionan un plato automáticamente. Recuperación
+prueba el OTP inválido por defecto; la guía explica cómo probar el código real. Imágenes
+requiere seleccionar un archivo. Desactiva Swagger/OpenAPI con SPRINGDOC_ENABLED=false.
 
-Las pruebas de autorización usan un controller de platos únicamente en `src/test`.
-Los endpoints reales de platos se implementarán en la fase 5. Las pruebas de esta fase
-cubren el contrato JSON, duplicados concurrentes, JWT expirados o con firma alterada,
-roles USER/ADMIN, usuarios eliminados y CORS.
+Calidad: `./gradlew check` ejecuta tests, ktlint y JaCoCo (mínimo 80% de líneas en cada
+paquete application/domain). Reporte HTML: `build/reports/jacoco/test/html/index.html`.
+Los límites por IP viven en memoria; desplegar una sola instancia o migrarlos a Redis.
+
+Deploy: [Railway](docs/DEPLOY-RAILWAY.md), Dockerfile multi-stage y CI en GitHub Actions.
