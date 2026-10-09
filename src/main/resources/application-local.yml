@@ -1,0 +1,8 @@
+spring:
+  docker:
+    compose:
+      enabled: true
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    com.geovannycode.ecoeats.notification.LoggingEmailSender: DEBUG
