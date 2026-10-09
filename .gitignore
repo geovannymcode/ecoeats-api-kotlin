@@ -41,10 +41,9 @@ out/
 
 target/
 .DS_Store
+# Keep only the versioned API contract; documentation stays local.
 /docs/*
-!/docs/API.md
 !/docs/openapi.yaml
-!/docs/DEPLOY-RAILWAY.md
 
 # Local environment and personal rules
 .env
@@ -58,5 +57,3 @@ CLAUDE.md
 .env
 .env.*
 !.env.example
-/docs/
-/postman/

@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify versioned OpenAPI contract
+        run: git ls-files --error-unmatch docs/openapi.yaml
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

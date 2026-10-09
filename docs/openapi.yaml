@@ -1,0 +1,2684 @@
+components:
+  schemas:
+    ApiErrorResponse:
+      properties:
+        data:
+          enum:
+          - null
+          nullable: true
+          type: object
+        errors:
+          description: Presente únicamente cuando fallan validaciones por campo.
+          items:
+            $ref: '#/components/schemas/FieldError'
+          type: array
+        message:
+          example: Plato no encontrado
+          type: string
+        success:
+          enum:
+          - false
+          example: false
+          type: boolean
+        timestamp:
+          example: '2026-10-09T12:00:00Z'
+          format: date-time
+          type: string
+      required:
+      - data
+      - message
+      - success
+      - timestamp
+      type: object
+    ApiHealthResponse:
+      properties:
+        status:
+          enum:
+          - UP
+          - DOWN
+          - OUT_OF_SERVICE
+          - UNKNOWN
+          example: UP
+          type: string
+      required:
+      - status
+      type: object
+    ApiResponseDish:
+      properties:
+        data:
+          $ref: '#/components/schemas/DishResponse'
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    ApiResponseDishList:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/DishResponse'
+          type: array
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    ApiResponseEmpty:
+      properties:
+        data:
+          enum:
+          - null
+          nullable: true
+          type: object
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    ApiResponseLogin:
+      properties:
+        data:
+          $ref: '#/components/schemas/LoginResponse'
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    ApiResponseRegister:
+      properties:
+        data:
+          $ref: '#/components/schemas/RegisterResponse'
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    ApiResponseVerifyOtp:
+      properties:
+        data:
+          $ref: '#/components/schemas/VerifyOtpResponse'
+        message:
+          example: OK
+          type: string
+        success:
+          enum:
+          - true
+          example: true
+          type: boolean
+      required:
+      - data
+      - message
+      - success
+      type: object
+    DishRequest:
+      properties:
+        carbohydrates:
+          description: Carbohidratos como entero no negativo
+          example: 85
+          format: int32
+          minimum: 0
+          type: integer
+        description:
+          description: Descripción del plato
+          example: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos, arroz blanco,
+            chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+          type: string
+        flagHeader:
+          default: false
+          description: Indica si el plato se muestra como destacado
+          example: false
+          type: boolean
+        ingredients:
+          description: Ingredientes como texto
+          example: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro, arepa, aguacate
+          type: string
+        name:
+          description: Nombre del plato, de 1 a 150 caracteres
+          example: Bandeja Paisa
+          maxLength: 150
+          minLength: 0
+          type: string
+        price:
+          description: Precio como número JSON, mayor o igual a cero; hasta 8 enteros y 2 decimales
+          example: 28000.0
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        proteins:
+          description: Proteínas como entero no negativo
+          example: 55
+          format: int32
+          minimum: 0
+          type: integer
+        rating:
+          description: Calificación como número JSON, entre 0 y 5; hasta un decimal
+          example: 4.9
+          exclusiveMaximum: false
+          exclusiveMinimum: false
+          maximum: 5
+          minimum: 0
+          type: number
+      required:
+      - carbohydrates
+      - description
+      - ingredients
+      - name
+      - price
+      - proteins
+      - rating
+      type: object
+    DishResponse:
+      properties:
+        carbohydrates:
+          description: Carbohidratos como entero no negativo
+          example: 85
+          format: int32
+          type: integer
+        description:
+          description: Descripción del plato
+          example: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos, arroz blanco,
+            chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+          type: string
+        flagHeader:
+          description: Indica si el plato se muestra como destacado
+          example: false
+          type: boolean
+        id:
+          description: Identificador UUID del recurso
+          example: 0199c394-3880-7000-8000-000000000001
+          format: uuid
+          type: string
+        image:
+          description: URL HTTP/HTTPS o URL prefirmada temporal (IMAGE_URL_TTL). Volver a pedir al listar; no persistir la
+            URL
+          example: https://storage.example.com/ecoeats/dishes/example.jpg?X-Amz-Expires=86400
+          type: string
+        ingredients:
+          description: Ingredientes como texto
+          example: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro, arepa, aguacate
+          type: string
+        name:
+          description: Nombre del plato, de 1 a 150 caracteres
+          example: Bandeja Paisa
+          type: string
+        price:
+          description: Precio como número JSON, mayor o igual a cero; hasta 8 enteros y 2 decimales
+          example: 28000.0
+          type: number
+        proteins:
+          description: Proteínas como entero no negativo
+          example: 55
+          format: int32
+          type: integer
+        rating:
+          description: Calificación como número JSON, entre 0 y 5; hasta un decimal
+          example: 4.9
+          type: number
+        thumbails:
+          description: 'thumbails está escrito así a propósito por compatibilidad. URL temporal: volver a pedir al listar
+            y no persistir'
+          example: https://storage.example.com/ecoeats/dishes/example-thumb.jpg?X-Amz-Expires=86400
+          type: string
+      required:
+      - carbohydrates
+      - description
+      - flagHeader
+      - id
+      - image
+      - ingredients
+      - name
+      - price
+      - proteins
+      - rating
+      - thumbails
+      type: object
+    FieldError:
+      properties:
+        field:
+          description: Nombre del campo JSON que falló la validación
+          example: correo
+          type: string
+        message:
+          description: Mensaje de validación en español
+          example: El correo debe ser válido
+          type: string
+      required:
+      - field
+      - message
+      type: object
+    ForgotPasswordRequest:
+      properties:
+        email:
+          description: Email; se normaliza con trim y lowercase
+          example: geovanny@example.com
+          format: email
+          minLength: 1
+          type: string
+      required:
+      - email
+      type: object
+    LoginRequest:
+      properties:
+        email:
+          description: Email; se normaliza con trim y lowercase
+          example: geovanny@example.com
+          format: email
+          minLength: 1
+          type: string
+        password:
+          description: 'Contraseña: registro mínimo 6 caracteres y máximo 72 bytes UTF-8'
+          example: Ejemplo123!
+          format: password
+          minLength: 1
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      type: object
+    LoginResponse:
+      properties:
+        email:
+          description: Email; se normaliza con trim y lowercase
+          example: geovanny@example.com
+          type: string
+        id:
+          description: Identificador UUID del recurso
+          example: 0199c394-3880-7000-8000-000000000001
+          format: uuid
+          type: string
+        token:
+          description: JWT de ejemplo no utilizable; copiar el token real del login
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleGFtcGxlIn0.example-signature
+          type: string
+        tokenFirebaseAuth:
+          description: Campo heredado del contrato; puede ser vacío
+          example: ''
+          type: string
+      required:
+      - email
+      - id
+      - token
+      - tokenFirebaseAuth
+      type: object
+    RegisterRequest:
+      properties:
+        apellidos:
+          description: Apellidos del usuario
+          example: Mendoza
+          maxLength: 100
+          minLength: 0
+          type: string
+        correo:
+          description: Email; registro utiliza correo, login utiliza email
+          example: geovanny@example.com
+          format: email
+          maxLength: 150
+          minLength: 0
+          type: string
+        nombres:
+          description: Nombres del usuario
+          example: Geovanny
+          maxLength: 100
+          minLength: 0
+          type: string
+        numero_documento:
+          description: Número de documento; en JSON se llama numero_documento
+          example: '1032456789'
+          maxLength: 30
+          minLength: 0
+          type: string
+        password:
+          description: 'Contraseña: registro mínimo 6 caracteres y máximo 72 bytes UTF-8'
+          example: Ejemplo123!
+          format: password
+          maxLength: 2147483647
+          minLength: 6
+          type: string
+          writeOnly: true
+      required:
+      - apellidos
+      - correo
+      - nombres
+      - numero_documento
+      - password
+      type: object
+    RegisterResponse:
+      properties:
+        user:
+          $ref: '#/components/schemas/RegisteredUser'
+      required:
+      - user
+      type: object
+    RegisteredUser:
+      properties:
+        apellidos:
+          description: Apellidos del usuario
+          example: Mendoza
+          type: string
+        correo:
+          description: Email; registro utiliza correo, login utiliza email
+          example: geovanny@example.com
+          type: string
+        id:
+          description: Identificador UUID del recurso
+          example: 0199c394-3880-7000-8000-000000000001
+          format: uuid
+          type: string
+        nombres:
+          description: Nombres del usuario
+          example: Geovanny
+          type: string
+        numero_documento:
+          description: Número de documento; en JSON se llama numero_documento
+          example: '1032456789'
+          type: string
+      required:
+      - apellidos
+      - correo
+      - id
+      - nombres
+      - numero_documento
+      type: object
+    ResetPasswordRequest:
+      properties:
+        email:
+          description: Email; se normaliza con trim y lowercase
+          example: geovanny@example.com
+          format: email
+          minLength: 1
+          type: string
+        newPassword:
+          description: 'Nueva contraseña: mínimo 6 caracteres y máximo 72 bytes UTF-8'
+          example: NuevaClave123!
+          format: password
+          maxLength: 2147483647
+          minLength: 6
+          type: string
+          writeOnly: true
+        otp:
+          description: Código de seis dígitos; vence en 15 minutos y se bloquea tras cinco intentos fallidos
+          example: '123456'
+          pattern: \d{6}
+          type: string
+      required:
+      - email
+      - newPassword
+      - otp
+      type: object
+    VerifyOtpRequest:
+      properties:
+        email:
+          description: Email; se normaliza con trim y lowercase
+          example: geovanny@example.com
+          format: email
+          minLength: 1
+          type: string
+        otp:
+          description: Código de seis dígitos; vence en 15 minutos y se bloquea tras cinco intentos fallidos
+          example: '123456'
+          pattern: \d{6}
+          type: string
+      required:
+      - email
+      - otp
+      type: object
+    VerifyOtpResponse:
+      properties:
+        valid:
+          description: Indica si el OTP es válido; false sigue siendo una respuesta HTTP 200
+          example: true
+          type: boolean
+      required:
+      - valid
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+info:
+  contact:
+    name: Geovanny Mendoza
+  description: 'Comida colombiana saludable: autenticación, catálogo e imágenes para clientes móviles y web.'
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: EcoEats API
+  version: 0.0.1-SNAPSHOT
+openapi: 3.0.1
+paths:
+  /api/dish:
+    get:
+      description: 'JWT, cualquier rol. Lista ordenada por name. image y thumbails pueden ser URLs temporales: volver a pedirlas
+        al listar, no persistirlas. El seed contiene 12 platos.'
+      operationId: list
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: OK
+                  value:
+                    data:
+                    - carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=600
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=200
+                    message: OK
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDishList'
+          description: OK
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Listar platos
+      tags:
+      - Platos
+    post:
+      description: JWT, solo ADMIN. No admite campos de imagen; subirla mediante el endpoint multipart después de crear el
+        plato. flagHeader por defecto false.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato creado correctamente
+                  value:
+                    data:
+                      carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: ''
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: ''
+                    message: Plato creado correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDish'
+          description: Plato creado correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: name
+                      message: El nombre es obligatorio
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '403':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Acceso denegado
+                  value:
+                    data: null
+                    message: Acceso denegado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Acceso denegado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Crear plato
+      tags:
+      - Platos
+  /api/dish/{id}:
+    delete:
+      description: JWT, solo ADMIN. Devuelve data:null. Las imágenes del bucket se borran después del commit; no borra URLs
+        externas.
+      operationId: delete
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato eliminado correctamente
+                  value:
+                    data: null
+                    message: Plato eliminado correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseEmpty'
+          description: Plato eliminado correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Parámetro de la petición inválido
+                  value:
+                    data: null
+                    message: Parámetro de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Parámetro de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '403':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Acceso denegado
+                  value:
+                    data: null
+                    message: Acceso denegado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Acceso denegado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato no encontrado
+                  value:
+                    data: null
+                    message: Plato no encontrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Plato no encontrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Eliminar plato
+      tags:
+      - Platos
+    get:
+      description: JWT, cualquier rol. id debe ser un UUID. thumbails conserva intencionalmente el typo del contrato móvil;
+        price y rating son números JSON.
+      operationId: find
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: OK
+                  value:
+                    data:
+                      carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=600
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=200
+                    message: OK
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDish'
+          description: OK
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Parámetro de la petición inválido
+                  value:
+                    data: null
+                    message: Parámetro de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Parámetro de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato no encontrado
+                  value:
+                    data: null
+                    message: Plato no encontrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Plato no encontrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Consultar plato
+      tags:
+      - Platos
+    put:
+      description: JWT, solo ADMIN. Reemplaza todos los campos editables del request y conserva las imágenes. No es una actualización
+        parcial.
+      operationId: update
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato actualizado correctamente
+                  value:
+                    data:
+                      carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=600
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: https://images.unsplash.com/photo-1599655722738-ae7a40b0b994?w=200
+                    message: Plato actualizado correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDish'
+          description: Plato actualizado correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: name
+                      message: El nombre es obligatorio
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Parámetro de la petición inválido
+                  value:
+                    data: null
+                    message: Parámetro de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example3:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Parámetro de la petición inválido / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '403':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Acceso denegado
+                  value:
+                    data: null
+                    message: Acceso denegado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Acceso denegado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato no encontrado
+                  value:
+                    data: null
+                    message: Plato no encontrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Plato no encontrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Actualizar plato
+      tags:
+      - Platos
+  /api/dish/{id}/image:
+    delete:
+      description: JWT, solo ADMIN. Conserva el plato, vacía image y thumbails y borra objetos propios del bucket después
+        del commit.
+      operationId: remove
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Imagen eliminada correctamente
+                  value:
+                    data:
+                      carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: ''
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: ''
+                    message: Imagen eliminada correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDish'
+          description: Imagen eliminada correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Parámetro de la petición inválido
+                  value:
+                    data: null
+                    message: Parámetro de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Parámetro de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '403':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Acceso denegado
+                  value:
+                    data: null
+                    message: Acceso denegado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Acceso denegado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato no encontrado
+                  value:
+                    data: null
+                    message: Plato no encontrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Plato no encontrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Quitar imagen de plato
+      tags:
+      - Imágenes
+    post:
+      description: JWT, solo ADMIN. Multipart con parte file (máximo 5 MB, petición 6 MB). Valida magic bytes JPEG/PNG/WebP,
+        genera JPEG de máximo 1200 px y miniatura de máximo 300 px. URLs firmadas según IMAGE_URL_TTL (24h por defecto). Reemplaza
+        y limpia imágenes anteriores.
+      operationId: upload
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: Imagen de hasta 5 MB
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+        description: Archivo JPEG, PNG o WebP de hasta 5 MB. El nombre de la parte debe ser file.
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Imagen actualizada correctamente
+                  value:
+                    data:
+                      carbohydrates: 85
+                      description: El plato más emblemático de la región antioqueña. Una generosa bandeja con frijoles rojos,
+                        arroz blanco, chicharrón crujiente, carne molida, chorizo, huevo frito, plátano maduro, arepa y aguacate.
+                      flagHeader: true
+                      id: 0199c394-3880-7000-8000-000000000001
+                      image: https://storage.example.com/ecoeats/dishes/example.jpg?X-Amz-Expires=86400
+                      ingredients: Frijoles rojos, arroz blanco, chicharrón, carne molida, chorizo, huevo frito, plátano maduro,
+                        arepa, aguacate
+                      name: Bandeja Paisa
+                      price: 28000.0
+                      proteins: 55
+                      rating: 4.9
+                      thumbails: https://storage.example.com/ecoeats/dishes/example-thumb.jpg?X-Amz-Expires=86400
+                    message: Imagen actualizada correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseDish'
+          description: Imagen actualizada correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Parámetro de la petición inválido
+                  value:
+                    data: null
+                    message: Parámetro de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Falta el archivo de imagen
+                  value:
+                    data: null
+                    message: Falta el archivo de imagen
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Parámetro de la petición inválido / Falta el archivo de imagen
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No autorizado
+                  value:
+                    data: null
+                    message: No autorizado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Token inválido
+                  value:
+                    data: null
+                    message: Token inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No autorizado / Token inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '403':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Acceso denegado
+                  value:
+                    data: null
+                    message: Acceso denegado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Acceso denegado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Plato no encontrado
+                  value:
+                    data: null
+                    message: Plato no encontrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Plato no encontrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: La imagen supera el tamaño máximo de 5 MB
+                  value:
+                    data: null
+                    message: La imagen supera el tamaño máximo de 5 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: La imagen supera el tamaño máximo de 5 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Formato no soportado. Usa JPEG, PNG o WebP
+                  value:
+                    data: null
+                    message: Formato no soportado. Usa JPEG, PNG o WebP
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Formato no soportado. Usa JPEG, PNG o WebP / Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '422':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: La imagen está dañada
+                  value:
+                    data: null
+                    message: La imagen está dañada
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: La imagen está dañada
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: Subir imagen de plato
+      tags:
+      - Imágenes
+  /api/securities/forgot-password:
+    post:
+      description: 'Público. Envía por email un OTP de seis dígitos válido durante 15 minutos e invalida los anteriores. Email
+        inexistente: 404; fallo de entrega: 503.'
+      operationId: forgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Código de recuperación enviado
+                  value:
+                    data: null
+                    message: Código de recuperación enviado
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseEmpty'
+          description: Código de recuperación enviado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: email
+                      message: El email debe ser válido
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '404':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No se encontró un usuario con ese email
+                  value:
+                    data: null
+                    message: No se encontró un usuario con ese email
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No se encontró un usuario con ese email
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '503':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: No fue posible enviar el correo, intenta de nuevo
+                  value:
+                    data: null
+                    message: No fue posible enviar el correo, intenta de nuevo
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: No fue posible enviar el correo, intenta de nuevo
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Solicitar código de recuperación
+      tags:
+      - Auth
+  /api/securities/login:
+    post:
+      description: Público. Devuelve JWT HS256 con vigencia JWT_EXPIRATION (24h por defecto). No hay refresh token; ante 401
+        iniciar sesión de nuevo.
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Login exitoso
+                  value:
+                    data:
+                      email: geovanny@example.com
+                      id: 0199c394-3880-7000-8000-000000000001
+                      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleGFtcGxlIn0.example-signature
+                      tokenFirebaseAuth: ''
+                    message: Login exitoso
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseLogin'
+          description: Login exitoso
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: email
+                      message: El email debe ser válido
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '401':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Credenciales inválidas
+                  value:
+                    data: null
+                    message: Credenciales inválidas
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Credenciales inválidas
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Iniciar sesión
+      tags:
+      - Auth
+  /api/securities/register:
+    post:
+      description: Público. Crea un usuario USER. correo se normaliza; email y numero_documento son únicos. No devuelve un
+        token.
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Usuario registrado correctamente
+                  value:
+                    data:
+                      user:
+                        apellidos: Mendoza
+                        correo: geovanny@example.com
+                        id: 0199c394-3880-7000-8000-000000000001
+                        nombres: Geovanny
+                        numero_documento: '1032456789'
+                    message: Usuario registrado correctamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseRegister'
+          description: Usuario registrado correctamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: correo
+                      message: El correo debe ser válido
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '409':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El email ya está registrado
+                  value:
+                    data: null
+                    message: El email ya está registrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: El número de documento ya está registrado
+                  value:
+                    data: null
+                    message: El número de documento ya está registrado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El email ya está registrado / El número de documento ya está registrado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Registrar usuario
+      tags:
+      - Auth
+  /api/securities/reset-password:
+    post:
+      description: Público. Valida y consume el OTP; la nueva contraseña debe tener al menos seis caracteres y como máximo
+        72 bytes UTF-8.
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Contraseña restablecida exitosamente
+                  value:
+                    data: null
+                    message: Contraseña restablecida exitosamente
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseEmpty'
+          description: Contraseña restablecida exitosamente
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: otp
+                      message: El OTP debe tener exactamente 6 dígitos
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: OTP inválido o expirado
+                  value:
+                    data: null
+                    message: OTP inválido o expirado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example3:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / OTP inválido o expirado / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Restablecer contraseña
+      tags:
+      - Auth
+  /api/securities/verify-otp:
+    post:
+      description: Público. HTTP 200 tanto para valid=true como false. Cinco intentos fallidos inutilizan el código. Verificar
+        no consume el OTP.
+      operationId: verifyOtp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyOtpRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: OTP válido
+                  value:
+                    data:
+                      valid: true
+                    message: OTP válido
+                    success: true
+                example2:
+                  summary: OTP inválido o expirado
+                  value:
+                    data:
+                      valid: false
+                    message: OTP inválido o expirado
+                    success: true
+              schema:
+                $ref: '#/components/schemas/ApiResponseVerifyOtp'
+          description: OTP válido / OTP inválido o expirado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Datos de entrada inválidos
+                  value:
+                    data: null
+                    errors:
+                    - field: otp
+                      message: El OTP debe tener exactamente 6 dígitos
+                    message: Datos de entrada inválidos
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+                example2:
+                  summary: Cuerpo de la petición inválido
+                  value:
+                    data: null
+                    message: Cuerpo de la petición inválido
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Datos de entrada inválidos / Cuerpo de la petición inválido
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '413':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: El cuerpo JSON supera el tamaño máximo de 1 MB
+                  value:
+                    data: null
+                    message: El cuerpo JSON supera el tamaño máximo de 1 MB
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: El cuerpo JSON supera el tamaño máximo de 1 MB
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '415':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Tipo de contenido no soportado
+                  value:
+                    data: null
+                    message: Tipo de contenido no soportado
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Tipo de contenido no soportado
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '429':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Demasiadas solicitudes, intenta más tarde
+                  value:
+                    data: null
+                    message: Demasiadas solicitudes, intenta más tarde
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Demasiadas solicitudes, intenta más tarde
+          headers:
+            Retry-After:
+              description: Segundos hasta el siguiente intento
+              schema:
+                format: int32
+                minimum: 1
+                type: integer
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '500':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Error interno del servidor
+                  value:
+                    data: null
+                    message: Error interno del servidor
+                    success: false
+                    timestamp: '2026-10-09T12:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+          description: Error interno del servidor
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Verificar código OTP
+      tags:
+      - Auth
+  /health:
+    get:
+      description: 'Público. Formato de Spring Boot Actuator: {status:UP}. No utiliza el envelope de negocio. 503 si está
+        DOWN o OUT_OF_SERVICE.'
+      operationId: health
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Servicio disponible
+                  value:
+                    status: UP
+              schema:
+                $ref: '#/components/schemas/ApiHealthResponse'
+          description: Servicio disponible
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+        '503':
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Servicio no disponible
+                  value:
+                    status: DOWN
+              schema:
+                $ref: '#/components/schemas/ApiHealthResponse'
+          description: Servicio no disponible
+          headers:
+            X-Request-Id:
+              description: Identificador de solicitud
+              schema:
+                type: string
+      security: []
+      summary: Consultar salud
+      tags:
+      - Health
+servers:
+- description: Local
+  url: http://localhost:8080
+tags:
+- description: Registro, login y recuperación de contraseña; rutas públicas.
+  name: Auth
+- description: Lectura con JWT y CRUD exclusivo para ADMIN.
+  name: Platos
+- description: Subida y borrado exclusivo para ADMIN; URLs prefirmadas temporales.
+  name: Imágenes
+- description: Estado público de la API; formato de Spring Boot Actuator.
+  name: Health
