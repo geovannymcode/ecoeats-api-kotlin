@@ -39,8 +39,7 @@ internal class DishEntity(
     @field:UuidGenerator(style = UuidGenerator.Style.VERSION_7)
     val id: UUID? = null
 
-    final override fun equals(other: Any?): Boolean =
-        this === other || (other is DishEntity && id != null && id == other.id)
+    final override fun equals(other: Any?): Boolean = this === other || (other is DishEntity && id != null && id == other.id)
 
     final override fun hashCode(): Int = id?.hashCode() ?: 0
 
