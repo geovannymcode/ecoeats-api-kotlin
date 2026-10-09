@@ -14,17 +14,26 @@ internal class ResendEmailSender(
 ) : EmailSender {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun sendPasswordResetOtp(to: String, otp: String) {
+    override fun sendPasswordResetOtp(
+        to: String,
+        otp: String,
+    ) {
         require(otp.matches(Regex("[0-9]{6}"))) { "OTP must contain six digits" }
-        val payload = ResendEmailRequest(
-            from = "$fromName <$fromEmail>",
-            to = listOf(to),
-            subject = "EcoEats - Código de recuperación de contraseña",
-            html = template.replace("{{otp}}", otp),
-        )
+        val payload =
+            ResendEmailRequest(
+                from = "$fromName <$fromEmail>",
+                to = listOf(to),
+                subject = "EcoEats - Código de recuperación de contraseña",
+                html = template.replace("{{otp}}", otp),
+            )
         try {
-            client.post().uri("/emails").contentType(MediaType.APPLICATION_JSON)
-                .body(payload).retrieve().toBodilessEntity()
+            client
+                .post()
+                .uri("/emails")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(payload)
+                .retrieve()
+                .toBodilessEntity()
         } catch (exception: RestClientResponseException) {
             logger.warn("Resend email delivery failed: status={}", exception.statusCode.value())
             throw EmailDeliveryException()
@@ -35,4 +44,9 @@ internal class ResendEmailSender(
     }
 }
 
-private data class ResendEmailRequest(val from: String, val to: List<String>, val subject: String, val html: String)
+private data class ResendEmailRequest(
+    val from: String,
+    val to: List<String>,
+    val subject: String,
+    val html: String,
+)

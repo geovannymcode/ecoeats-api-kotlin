@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory
 internal class LoggingEmailSender : EmailSender {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun sendPasswordResetOtp(to: String, otp: String) {
+    override fun sendPasswordResetOtp(
+        to: String,
+        otp: String,
+    ) {
         logger.info("OTP enviado a {}", to.maskedEmail())
-        logger.debug("Local password recovery OTP: {}", otp)
     }
 }
