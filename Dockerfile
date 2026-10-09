@@ -4,9 +4,9 @@ WORKDIR /workspace
 COPY gradlew settings.gradle.kts build.gradle.kts ./
 COPY gradle/ gradle/
 RUN chmod +x gradlew
-RUN --mount=type=cache,target=/root/.gradle ./gradlew dependencies --configuration runtimeClasspath --no-daemon
+RUN --mount=type=cache,id=ecoeats-gradle-cache,target=/root/.gradle ./gradlew dependencies --configuration runtimeClasspath --no-daemon
 COPY src/ src/
-RUN --mount=type=cache,target=/root/.gradle ./gradlew bootJar -x test --no-daemon \
+RUN --mount=type=cache,id=ecoeats-gradle-cache,target=/root/.gradle ./gradlew bootJar -x test --no-daemon \
     && cp build/libs/*-SNAPSHOT.jar app.jar \
     && java -Djarmode=tools -jar app.jar extract --layers --launcher --destination /layers
 
