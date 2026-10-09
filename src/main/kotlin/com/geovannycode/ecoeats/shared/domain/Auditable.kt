@@ -14,6 +14,5 @@ internal abstract class Auditable {
 
     @field:UpdateTimestamp
     @field:Column(name = "updated_at", nullable = false)
-    var updatedAt: Instant? = null
-        protected set
+    val updatedAt: Instant? = null
 }

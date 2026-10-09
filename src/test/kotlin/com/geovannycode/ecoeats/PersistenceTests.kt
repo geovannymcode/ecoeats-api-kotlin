@@ -25,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.support.TransactionTemplate
 import java.math.BigDecimal
 import java.time.Instant
-import java.util.UUID
 import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -36,24 +35,35 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Import(TestcontainersConfiguration::class)
-@SpringBootTest(properties = [
-    "spring.docker.compose.enabled=false",
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "ecoeats.jwt.secret=test-only-secret-with-at-least-32-bytes",
-    "ecoeats.mail.resend.api-key=test-only",
-    "ecoeats.mail.resend.from-email=test@example.com",
-    "ecoeats.seed.admin-password=",
-])
+@SpringBootTest(
+    properties = [
+        "spring.docker.compose.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=validate",
+        "ecoeats.jwt.secret=test-only-secret-with-at-least-32-bytes",
+        "ecoeats.mail.resend.api-key=test-only",
+        "ecoeats.mail.resend.from-email=test@example.com",
+        "ecoeats.seed.admin-password=",
+    ],
+)
 internal class PersistenceTests {
     @Autowired private lateinit var users: UserRepository
+
     @Autowired private lateinit var tokens: PasswordResetTokenRepository
+
     @Autowired private lateinit var dishes: DishRepository
+
     @Autowired private lateinit var flyway: Flyway
+
     @Autowired private lateinit var dataSource: DataSource
+
     @Autowired private lateinit var jdbc: JdbcTemplate
+
     @Autowired private lateinit var encoder: PasswordEncoder
+
     @Autowired private lateinit var properties: EcoEatsProperties
+
     @Autowired private lateinit var transaction: TransactionTemplate
+
     @Autowired private lateinit var entityManager: EntityManager
 
     @BeforeEach
@@ -196,10 +206,15 @@ internal class PersistenceTests {
         }
     }
 
-    private fun user(email: String = "person@example.com", document: String = "100") =
-        UserEntity(document, "Test", "Account", email, "test-only-password-hash")
+    private fun user(
+        email: String = "person@example.com",
+        document: String = "100",
+    ) = UserEntity(document, "Test", "Account", email, "test-only-password-hash")
 
-    private fun seeder(password: String?) = AdminSeeder(
-        properties.copy(seed = EcoEatsProperties.Seed(password)), users, encoder,
-    )
+    private fun seeder(password: String?) =
+        AdminSeeder(
+            properties.copy(seed = EcoEatsProperties.Seed(password)),
+            users,
+            encoder,
+        )
 }

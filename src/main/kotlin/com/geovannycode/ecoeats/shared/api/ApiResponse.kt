@@ -11,9 +11,14 @@ internal data class ApiResponse<T>(
     @get:JsonInclude(JsonInclude.Include.NON_NULL) val errors: List<FieldError>? = null,
 ) {
     companion object {
-        fun <T> ok(data: T?, message: String = "OK"): ApiResponse<T> = ApiResponse(true, message, data)
+        fun <T> ok(
+            data: T?,
+            message: String = "OK",
+        ): ApiResponse<T> = ApiResponse(true, message, data)
 
-        fun fail(message: String, errors: List<FieldError>? = null): ApiResponse<Nothing> =
-            ApiResponse(false, message, null, Instant.now(), errors)
+        fun fail(
+            message: String,
+            errors: List<FieldError>? = null,
+        ): ApiResponse<Nothing> = ApiResponse(false, message, null, Instant.now(), errors)
     }
 }
