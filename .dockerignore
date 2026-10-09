@@ -1,0 +1,16 @@
+build/
+.gradle/
+.kotlin/
+.git/
+.github/
+.idea/
+.vscode/
+.env
+.env.*
+**/.DS_Store
+**/*.md
+docs/
+postman/
+src/test/
+docker/
+compose.yaml

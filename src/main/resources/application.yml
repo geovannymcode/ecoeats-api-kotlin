@@ -1,6 +1,10 @@
 spring:
   application:
     name: ecoeats-api
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
   threads:
     virtual:
       enabled: true
@@ -9,17 +13,32 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 10
     url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:ecoeats}
     username: ${PGUSER:postgres}
     password: ${PGPASSWORD:postgres}
 server:
   port: ${PORT:8080}
   shutdown: graceful
+  forward-headers-strategy: framework
 springdoc:
+  paths-to-match: /api/**,/health
+  override-with-generic-response: false
+  cache:
+    disabled: false
   swagger-ui:
     path: /docs
+    enabled: ${SPRINGDOC_ENABLED:true}
+    persist-authorization: true
+    try-it-out-enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
   api-docs:
     path: /v3/api-docs
+    enabled: ${SPRINGDOC_ENABLED:true}
+    version: OPENAPI_3_0
 management:
   endpoints:
     web:
@@ -32,6 +51,15 @@ management:
       probes:
         enabled: false
 ecoeats:
+  public-url: ${PUBLIC_URL:}
+  storage:
+    bucket: ${BUCKET}
+    endpoint: ${ENDPOINT}
+    region: ${REGION:auto}
+    access-key-id: ${ACCESS_KEY_ID}
+    secret-access-key: ${SECRET_ACCESS_KEY}
+    force-path-style: ${S3_FORCE_PATH_STYLE:false}
+    url-ttl: ${IMAGE_URL_TTL:24h}
   cors:
     allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
   jwt:

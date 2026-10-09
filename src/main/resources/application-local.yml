@@ -5,4 +5,12 @@ spring:
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    com.geovannycode.ecoeats.notification.LoggingEmailSender: DEBUG
+
+ecoeats:
+  storage:
+    bucket: ${BUCKET:ecoeats-local}
+    endpoint: ${ENDPOINT:http://localhost:9000}
+    region: ${REGION:us-east-1}
+    access-key-id: ${ACCESS_KEY_ID:minioadmin}
+    secret-access-key: ${SECRET_ACCESS_KEY:minioadmin}
+    force-path-style: ${S3_FORCE_PATH_STYLE:true}

@@ -41,7 +41,10 @@ out/
 
 target/
 .DS_Store
-docs/
+/docs/*
+!/docs/API.md
+!/docs/openapi.yaml
+!/docs/DEPLOY-RAILWAY.md
 
 # Local environment and personal rules
 .env
@@ -55,3 +58,5 @@ CLAUDE.md
 .env
 .env.*
 !.env.example
+/docs/
+/postman/

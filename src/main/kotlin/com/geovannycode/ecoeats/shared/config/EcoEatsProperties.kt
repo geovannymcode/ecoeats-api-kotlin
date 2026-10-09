@@ -15,16 +15,26 @@ internal data class EcoEatsProperties(
     @field:Valid val mail: Mail,
     val seed: Seed = Seed(),
 ) {
-    data class Cors(val allowedOrigins: List<String>)
+    data class Cors(
+        val allowedOrigins: List<String>,
+    )
+
     data class Jwt(
         @field:NotBlank val secret: String,
         val expiration: Duration = Duration.ofHours(24),
     )
-    data class Mail(@field:Valid val resend: Resend)
+
+    data class Mail(
+        @field:Valid val resend: Resend,
+    )
+
     data class Resend(
         val apiKey: String,
         @field:NotBlank @field:Email val fromEmail: String,
         @field:NotBlank val fromName: String,
     )
-    data class Seed(val adminPassword: String? = null)
+
+    data class Seed(
+        val adminPassword: String? = null,
+    )
 }

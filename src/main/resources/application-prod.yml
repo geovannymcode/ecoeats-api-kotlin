@@ -1,7 +1,17 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}?sslmode=${PGSSLMODE:disable}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
   docker:
     compose:
       enabled: false
 logging:
   level:
     root: INFO
+  structured:
+    format:
+      console: ecs
+ecoeats:
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:}
