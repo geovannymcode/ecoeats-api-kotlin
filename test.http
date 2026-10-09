@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:8080
+
+### 1. Registrar usuario
+POST {{baseUrl}}/api/securities/register
+Content-Type: application/json
+
+{
+    "numero_documento": "12345678",
+    "nombres": "Demo",
+    "apellidos": "EcoEats",
+    "correo": "demo@ecoeats.com",
+    "password": "demo123"
+}
+
+### 2. Iniciar sesión
+POST {{baseUrl}}/api/securities/login
+Content-Type: application/json
+
+{
+    "email": "demo@ecoeats.com",
+    "password": "demo123"
+}
