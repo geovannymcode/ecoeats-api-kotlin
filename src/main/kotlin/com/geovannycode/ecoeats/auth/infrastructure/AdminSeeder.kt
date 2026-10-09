@@ -29,14 +29,16 @@ internal class AdminSeeder(
             logger.info("Admin seed skipped: account already exists")
             return
         }
-        users.save(UserEntity(
-            numeroDocumento = "00000000",
-            nombres = "Admin",
-            apellidos = "EcoEats",
-            email = "admin@ecoeats.com",
-            password = checkNotNull(passwordEncoder.encode(password)) { "Password encoder returned no hash" },
-            role = Role.ADMIN,
-        ))
+        users.save(
+            UserEntity(
+                numeroDocumento = "00000000",
+                nombres = "Admin",
+                apellidos = "EcoEats",
+                email = "admin@ecoeats.com",
+                password = checkNotNull(passwordEncoder.encode(password)) { "Password encoder returned no hash" },
+                role = Role.ADMIN,
+            ),
+        )
         logger.info("Admin account seeded")
     }
 }

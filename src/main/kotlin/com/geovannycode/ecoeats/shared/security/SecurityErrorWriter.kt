@@ -7,8 +7,14 @@ import org.springframework.stereotype.Component
 import tools.jackson.databind.ObjectMapper
 
 @Component
-internal class SecurityErrorWriter(private val mapper: ObjectMapper) {
-    fun write(response: HttpServletResponse, status: Int, message: String) {
+internal class SecurityErrorWriter(
+    private val mapper: ObjectMapper,
+) {
+    fun write(
+        response: HttpServletResponse,
+        status: Int,
+        message: String,
+    ) {
         response.status = status
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.characterEncoding = Charsets.UTF_8.name()

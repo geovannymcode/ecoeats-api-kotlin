@@ -33,8 +33,7 @@ internal class PasswordResetTokenEntity(
     @field:Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: Instant? = null
 
-    final override fun equals(other: Any?): Boolean =
-        this === other || (other is PasswordResetTokenEntity && id != null && id == other.id)
+    final override fun equals(other: Any?): Boolean = this === other || (other is PasswordResetTokenEntity && id != null && id == other.id)
 
     final override fun hashCode(): Int = id?.hashCode() ?: 0
 

@@ -1,3 +1,8 @@
 package com.geovannycode.ecoeats.auth.api
 
-internal data class RegisterResponse(val user: RegisteredUser)
+import io.swagger.v3.oas.annotations.media.Schema
+
+internal data class RegisterResponse(
+    @field:Schema(description = "Usuario registrado, sin contraseña", example = "", requiredMode = Schema.RequiredMode.REQUIRED)
+    val user: RegisteredUser,
+)

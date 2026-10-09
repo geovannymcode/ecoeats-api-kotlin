@@ -70,9 +70,10 @@ internal class JwtSecurityTests {
         verify(exactly = 2) { users.existsById(id) }
     }
 
-    private fun properties(secret: String) = EcoEatsProperties(
-        EcoEatsProperties.Cors(listOf("http://localhost:3000")),
-        EcoEatsProperties.Jwt(secret),
-        EcoEatsProperties.Mail(EcoEatsProperties.Resend("test", "test@example.com", "Test")),
-    )
+    private fun properties(secret: String) =
+        EcoEatsProperties(
+            EcoEatsProperties.Cors(listOf("http://localhost:3000")),
+            EcoEatsProperties.Jwt(secret),
+            EcoEatsProperties.Mail(EcoEatsProperties.Resend("test", "test@example.com", "Test")),
+        )
 }

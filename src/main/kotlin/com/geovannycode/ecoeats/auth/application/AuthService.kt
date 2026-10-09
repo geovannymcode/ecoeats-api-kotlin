@@ -13,11 +13,21 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-internal class AuthService(private val users: UserRepository, private val encoder: PasswordEncoder, private val tokens: TokenIssuer) {
+internal class AuthService(
+    private val users: UserRepository,
+    private val encoder: PasswordEncoder,
+    private val tokens: TokenIssuer,
+) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val dummyHash = checkNotNull(encoder.encode(UUID.randomUUID().toString()))
 
-    fun register(numeroDocumento: String, nombres: String, apellidos: String, correo: String, password: String): RegistrationResult {
+    fun register(
+        numeroDocumento: String,
+        nombres: String,
+        apellidos: String,
+        correo: String,
+        password: String,
+    ): RegistrationResult {
         val email = correo.normalizedEmail()
         logger.info("Register attempt: email={}", email.maskedEmail())
         if (users.existsByEmailIgnoreCase(email)) return RegistrationResult.EmailTaken
@@ -35,7 +45,10 @@ internal class AuthService(private val users: UserRepository, private val encode
         }
     }
 
-    fun login(email: String, password: String): LoginResult {
+    fun login(
+        email: String,
+        password: String,
+    ): LoginResult {
         val normalized = email.normalizedEmail()
         val user = users.findByEmailIgnoreCase(normalized)
         val supportedLength = password.toByteArray(Charsets.UTF_8).size <= 72

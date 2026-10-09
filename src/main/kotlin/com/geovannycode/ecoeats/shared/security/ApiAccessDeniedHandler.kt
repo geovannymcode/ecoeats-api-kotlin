@@ -7,8 +7,14 @@ import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.stereotype.Component
 
 @Component
-internal class ApiAccessDeniedHandler(private val errors: SecurityErrorWriter) : AccessDeniedHandler {
-    override fun handle(request: HttpServletRequest, response: HttpServletResponse, exception: AccessDeniedException) {
+internal class ApiAccessDeniedHandler(
+    private val errors: SecurityErrorWriter,
+) : AccessDeniedHandler {
+    override fun handle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        exception: AccessDeniedException,
+    ) {
         errors.write(response, 403, "Acceso denegado")
     }
 }

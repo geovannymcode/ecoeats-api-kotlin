@@ -35,8 +35,7 @@ internal class UserEntity(
     @field:UuidGenerator(style = UuidGenerator.Style.VERSION_7)
     val id: UUID? = null
 
-    final override fun equals(other: Any?): Boolean =
-        this === other || (other is UserEntity && id != null && id == other.id)
+    final override fun equals(other: Any?): Boolean = this === other || (other is UserEntity && id != null && id == other.id)
 
     final override fun hashCode(): Int = id?.hashCode() ?: 0
 

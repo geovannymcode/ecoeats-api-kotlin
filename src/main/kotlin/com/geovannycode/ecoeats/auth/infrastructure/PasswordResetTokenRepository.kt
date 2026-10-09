@@ -14,5 +14,7 @@ internal interface PasswordResetTokenRepository : JpaRepository<PasswordResetTok
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("update PasswordResetTokenEntity token set token.used = true where token.userId = :userId and token.used = false")
-    fun invalidateActiveTokens(@Param("userId") userId: UUID): Int
+    fun invalidateActiveTokens(
+        @Param("userId") userId: UUID,
+    ): Int
 }

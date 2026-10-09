@@ -1,3 +1,12 @@
 package com.geovannycode.ecoeats.auth.api
 
-internal data class VerifyOtpResponse(val valid: Boolean)
+import io.swagger.v3.oas.annotations.media.Schema
+
+internal data class VerifyOtpResponse(
+    @field:Schema(
+        description = "Indica si el OTP es válido; false sigue siendo una respuesta HTTP 200",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+    )
+    val valid: Boolean,
+)

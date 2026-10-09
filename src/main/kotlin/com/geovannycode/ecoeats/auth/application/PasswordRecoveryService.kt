@@ -35,13 +35,20 @@ internal class PasswordRecoveryService(
     }
 
     @Transactional
-    fun verifyOtp(email: String, otp: String): Boolean {
+    fun verifyOtp(
+        email: String,
+        otp: String,
+    ): Boolean {
         val user = users.findByEmailForUpdate(email.normalizedEmail()) ?: return false
         return validatedToken(user, otp) != null
     }
 
     @Transactional
-    fun resetPassword(email: String, otp: String, newPassword: String): PasswordResetResult {
+    fun resetPassword(
+        email: String,
+        otp: String,
+        newPassword: String,
+    ): PasswordResetResult {
         val user = users.findByEmailForUpdate(email.normalizedEmail()) ?: return PasswordResetResult.InvalidOtp
         val token = validatedToken(user, otp) ?: return PasswordResetResult.InvalidOtp
         user.password = checkNotNull(encoder.encode(newPassword)) { "Password encoder returned no hash" }
@@ -51,7 +58,10 @@ internal class PasswordRecoveryService(
         return PasswordResetResult.Reset
     }
 
-    private fun validatedToken(user: UserEntity, otp: String): PasswordResetTokenEntity? {
+    private fun validatedToken(
+        user: UserEntity,
+        otp: String,
+    ): PasswordResetTokenEntity? {
         val token = tokens.findFirstByUserIdAndUsedFalseOrderByCreatedAtDesc(checkNotNull(user.id)) ?: return null
         if (token.used || !token.expiresAt.isAfter(clock.instant())) return null
         if (token.attempts >= 5) {

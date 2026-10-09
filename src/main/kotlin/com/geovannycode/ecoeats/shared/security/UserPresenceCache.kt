@@ -7,7 +7,10 @@ import java.time.Instant
 import java.util.UUID
 
 @Component
-internal class UserPresenceCache(private val users: UserRepository, private val clock: Clock) {
+internal class UserPresenceCache(
+    private val users: UserRepository,
+    private val clock: Clock,
+) {
     private val presentUntil = LinkedHashMap<UUID, Instant>()
 
     // Cache only existing accounts, cap memory, and recheck deletions after five seconds.

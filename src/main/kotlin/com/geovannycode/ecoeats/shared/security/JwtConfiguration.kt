@@ -30,11 +30,13 @@ internal class JwtConfiguration {
     }
 
     @Bean
-    fun jwtEncoder(jwtSecretKey: SecretKey): JwtEncoder =
-        NimbusJwtEncoder(ImmutableSecret<SecurityContext>(jwtSecretKey))
+    fun jwtEncoder(jwtSecretKey: SecretKey): JwtEncoder = NimbusJwtEncoder(ImmutableSecret<SecurityContext>(jwtSecretKey))
 
     @Bean
-    fun jwtDecoder(jwtSecretKey: SecretKey, clock: Clock): JwtDecoder =
+    fun jwtDecoder(
+        jwtSecretKey: SecretKey,
+        clock: Clock,
+    ): JwtDecoder =
         NimbusJwtDecoder.withSecretKey(jwtSecretKey).macAlgorithm(MacAlgorithm.HS256).build().apply {
             setJwtValidator(JwtTimestampValidator(Duration.ZERO).apply { setClock(clock) })
         }
